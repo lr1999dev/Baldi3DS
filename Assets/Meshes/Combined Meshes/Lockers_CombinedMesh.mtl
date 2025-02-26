@@ -1,0 +1,9 @@
+newmtl Locker
+map_Kd Locker.png
+Kd 1 1 1
+d 1
+
+newmtl LockerSide
+Kd 1 0 0
+d 1
+

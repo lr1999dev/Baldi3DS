@@ -1,0 +1,9 @@
+newmtl SchoolMat
+map_Kd SchoolTex.png
+Kd 1.0 1.0 1.0
+d 1.0
+
+newmtl Black
+Kd 0 0 0
+d 1
+

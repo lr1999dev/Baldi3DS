@@ -1,0 +1,9 @@
+newmtl Desk
+map_Kd wood.png
+Kd 1 1 1
+d 1
+
+newmtl BSODA_Side
+Kd 0.08823532 0.08823532 0.08823532
+d 1
+

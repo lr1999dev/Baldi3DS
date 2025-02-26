@@ -1,0 +1,25 @@
+# ProBuilder 4.5.2
+# https://unity3d.com/unity/features/worldbuilding/probuilder
+# 9/2/2024 12:46:59 PM
+
+mtllib ./DoubleQuad.mtl
+o DoubleQuad
+
+g DoubleQuad
+v 0.5 -0.5 -3.061617E-17
+v -0.5 0.5 3.061617E-17
+v -0.5 -0.5 -3.061617E-17
+v 0.5 0.5 3.061617E-17
+
+vt 0 0
+vt 1 1
+vt 1 0
+vt 0 1
+
+vn 0 6.123234E-17 -1
+vn 0 6.123234E-17 1
+
+usemtl Lit
+f 4/4/1 1/1/1 3/3/1 2/2/1
+f 2/4/2 3/1/2 1/3/2 4/2/2
+

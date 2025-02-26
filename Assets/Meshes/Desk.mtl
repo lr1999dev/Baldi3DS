@@ -1,0 +1,5 @@
+newmtl Desk
+map_Kd wood.png
+Kd 1 1 1
+d 1
+
