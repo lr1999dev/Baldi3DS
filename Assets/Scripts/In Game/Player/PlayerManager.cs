@@ -6,22 +6,38 @@ public class PlayerManager : Singleton<PlayerManager>
 {
 	public PlayerController ctrl;
 	public PlayerInteract ic;
+
+	public ItemManager itm;
 	public HudManager hud;
 
-	// Use this for initialization
-	void Start () 
+    public bool Disobeying { get { return guilt > 0; } }
+    public string GuiltType { get; private set; }
+
+    float guilt;
+
+    void Start () 
 	{
         Main.AdjustFramerate(true);
     }
 	
-	// Update is called once per frame
-	void Update () {
-		
+	void Update () 
+	{
+		if (guilt > 0)
+			guilt -= Time.deltaTime;
 	}
 
-	public void Teleport(Vector3 pos)
+    public void ApplyGuilt(string type, float amount, bool force = false)
     {
-		ctrl.transform.position = pos;
-		CullingManager.updateNow = true;
+        if (amount >= guilt || force)
+        {
+            guilt = Mathf.Max(amount, 0);
+            GuiltType = type;
+        }
+    }
+
+    public void ClearGuilt()
+    {
+        guilt = 0;
+        GuiltType = "";
     }
 }

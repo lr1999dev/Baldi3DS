@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour {
-	[SerializeField] CharacterController cc;
+public class PlayerController : MovableEntity
+{
+	[Space, SerializeField] 
+	CharacterController cc;
 
 	public PlayerManager pm;
 	public PlayerCamera plc;
@@ -15,14 +17,13 @@ public class PlayerController : MonoBehaviour {
 	float stamina;
 	bool running;
 
-	// Use this for initialization
 	void Start () 
 	{
 		stamina = maxStamina;
 	}
 	
-	// Update is called once per frame
-	void Update () {
+	void Update () 
+	{
 		running = InputManager.Instance.GetButton(InputAction.Run);
 		Move(InputManager.Instance.GetCirclePad());
 
@@ -46,9 +47,13 @@ public class PlayerController : MonoBehaviour {
 		if (running && stamina > 0)
 			speed = runSpeed;
 
-		var moveDir = (moveX + moveZ).normalized * speed;
-		cc.Move(moveDir * Time.deltaTime);
-		UpdateStamina(moveDir.magnitude);
+		var desiredMovement = (moveX + moveZ).normalized * speed;
+		var movement = desiredMovement * Time.deltaTime;
+
+		RecalculateMoveEffects();
+        cc.Move(movement * MovementMultiplier + MovementAddend);
+
+		UpdateStamina(desiredMovement.magnitude);
     }
 
 	public void Look(Vector2 input)
@@ -56,12 +61,29 @@ public class PlayerController : MonoBehaviour {
 		transform.eulerAngles += input.x * 5 * Vector3.up; // 5 is a placeholder for the look sensitivity
     }
 
+	public void RefillStamina(float multiplier = 1)
+	{
+		stamina = maxStamina * multiplier;
+	}
+
+	public void Teleport(Vector3 pos)
+	{
+		cc.enabled = false;
+		if (pos.y < transform.position.y)
+			pos.y = transform.position.y;
+		transform.position = pos;
+		cc.enabled = true;
+	}
+
 	void UpdateStamina(float rawSpeed)
     {
 		if (rawSpeed > cc.minMoveDistance && cc.velocity.magnitude > 0)
 		{
 			if (stamina > 0 && running)
-				stamina -= staminaDrop * Time.deltaTime;
+			{
+                stamina -= staminaDrop * Time.deltaTime;
+				pm.ApplyGuilt("Running", 0.1f);
+            }
 		}
 		else if (stamina < maxStamina)
 		{

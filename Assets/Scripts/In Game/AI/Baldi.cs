@@ -11,21 +11,19 @@ public class Baldi : NPC
 
 	float slapTimer;
 
-	// Use this for initialization
 	void Start () 
 	{
 		slapTimer = baseTime;
 		// TargetPlayer();
 	}
 	
-	// Update is called once per frame
 	void Update () 
 	{
 		slapTimer -= Time.deltaTime;
 		if (slapTimer <= 0)
 		{
 			animator.Play("Slap", -1, 0);
-			slapTimer = 0.5f;
+			slapTimer = 3;
 		}
 	}
 

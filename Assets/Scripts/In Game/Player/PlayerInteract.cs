@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerInteract : MonoBehaviour {
 	[SerializeField] float clickDistance = 2;
-	[SerializeField] LayerMask clickLayers;
+	public LayerMask clickLayers;
 
 	RaycastHit hit;
 	IClickable clickTarget;
@@ -17,14 +17,19 @@ public class PlayerInteract : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		if (Time.timeScale != 0 && InputManager.Instance.GetButton(InputAction.Interact, ButtonInputType.Down))
+		if (Time.timeScale == 0)
+			return;
+
+        if (InputManager.Instance.GetButton(InputAction.Interact, ButtonInputType.Down) && Raycast(clickLayers, out hit))
         {
-			if (Physics.Raycast(transform.position, transform.forward, out hit, clickDistance, clickLayers))
-			{
-                clickTarget = hit.transform.GetComponent<IClickable>();
-                if (clickTarget != null)
-                    clickTarget.OnClick();
-            }
+            clickTarget = hit.transform.GetComponent<IClickable>();
+            if (clickTarget != null)
+                clickTarget.OnClick();
         }
+	}
+
+	public bool Raycast(LayerMask mask, out RaycastHit hit)
+	{
+		return Physics.Raycast(transform.position, transform.forward, out hit, clickDistance, mask);
 	}
 }

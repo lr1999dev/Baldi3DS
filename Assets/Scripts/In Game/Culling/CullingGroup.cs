@@ -65,7 +65,7 @@ public class CullingGroup : MonoBehaviour
         {
             visible = val;
             for (int i = 0; i < allRenderers.Length; i++)
-                allRenderers[i].enabled = val;
+                allRenderers[i].gameObject.SetActive(val);
         }
     }
 }

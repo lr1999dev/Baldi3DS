@@ -10,22 +10,22 @@ public class CullingManager : MonoBehaviour
 	public Camera cam;
 	public float updateRate = 0.05f;
 
-	float timeUntilUpdate;
+	float timer;
 
 	// Use this for initialization
 	void Start () 
 	{
-		timeUntilUpdate = updateRate;
+		timer = updateRate;
 		UpdateCulling();
 	}
 
 	void Update()
 	{
-		timeUntilUpdate -= Time.unscaledDeltaTime;
-		if (timeUntilUpdate <= 0 || updateNow)
+		timer -= Time.unscaledDeltaTime;
+		if (timer <= 0 || updateNow)
 		{
 			UpdateCulling();
-            timeUntilUpdate = updateRate;
+            timer = updateRate;
             updateNow = false;
         }
 	}

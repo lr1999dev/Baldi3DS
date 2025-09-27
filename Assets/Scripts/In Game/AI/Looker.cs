@@ -12,7 +12,6 @@ public class Looker : MonoBehaviour
 	LayerMask playerMask, npcMask;
 	Ray ray; RaycastHit hit;
 
-	// Use this for initialization
 	void Start () 
 	{
 		playerMask = layerMask | LayerMask.GetMask("Player");

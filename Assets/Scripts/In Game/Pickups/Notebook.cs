@@ -9,9 +9,8 @@ public class Notebook : PickupBase
 	public override void OnClick()
 	{
 		if (activity != null)
-		{
 			Instantiate(activity).Initialize(this);
-		}
+
 		SetEnabled(false);
 		GameController.Instance.CollectNotebook();
 	}

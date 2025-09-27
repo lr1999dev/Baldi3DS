@@ -1,11 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.N3DS;
 
 public class Debugger : MonoBehaviour 
 {
+    bool isActive;
+
+    void Update()
+    {
+        if (GamePad.GetButtonHold(N3dsButton.Start) && GamePad.GetButtonTrigger(N3dsButton.A))
+            isActive = !isActive;
+    }
+
     void OnGUI()
     {
+        if (!isActive)
+            return;
+
         GUI.color = Color.blue;
         GUI.Label(new Rect(0, 0, 150, 20), Mathf.Round(1f / Time.unscaledDeltaTime) + " FPS");
 

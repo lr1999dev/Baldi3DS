@@ -2,24 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StandardDoor : Door, IClickable {
+public class StandardDoor : Door, IClickable 
+{
+    [SerializeField] float timeOpen = 3;
 	[SerializeField] Collider barrier;
 
-	[SerializeField] AudioSource audioDevice;
+	public AudioSource audioDevice;
 	[SerializeField] AudioClip audOpen, audClose;
 
-    /*
     void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("NPC"))
-            Open(3);
+        if (!Locked && other.CompareTag("NPC"))
+            Open(timeOpen);
     }
-    */
 
 	public void OnClick()
     {
         if (!Locked)
-            Open(3);
+            Open(timeOpen);
     }
 
     public override void Open(float t)

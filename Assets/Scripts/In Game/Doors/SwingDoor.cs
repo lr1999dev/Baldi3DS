@@ -13,18 +13,18 @@ public class SwingDoor : Door
 
     void OnTriggerStay(Collider other)
     {
-        if (!Locked)
+        if (Locked)
+            return;
+
+        if (!Opened)
         {
-            if (!Opened)
+            audioDevice.PlayOneShot(audOpen);
+            if (other.CompareTag("Player"))
             {
-                audioDevice.PlayOneShot(audOpen);
-                if (other.CompareTag("Player"))
-                {
-                    // hearing code here
-                }
+                // hearing code here
             }
-            Open(3);
         }
+        Open(3);
     }
 
     public override void Lock(float t)

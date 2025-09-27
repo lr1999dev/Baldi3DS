@@ -40,9 +40,11 @@ public class Main : MonoBehaviour
     {
 #if !UNITY_EDITOR && UNITY_N3DS
         if (inGame)
+        {
             Application.targetFrameRate = IsNew3DS ? 60 : 30;
-        else
-            Application.targetFrameRate = 60;
+            return;
+        }
+        Application.targetFrameRate = 60;
 #endif
     }
 }

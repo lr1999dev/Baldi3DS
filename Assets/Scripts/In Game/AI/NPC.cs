@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NPC : MonoBehaviour 
+public class NPC : MovableEntity 
 {
+	[Space]
 	public Looker looker;
 	public Navigator navigator;
+	public EnvironmentManager em;
 
-	bool playerInSight;
+	public PlayerManager Player { get { return PlayerManager.Instance; } }
 
-	public static int activeNPCs;
+    bool playerInSight;
 
-	void OnEnable()
+    void OnEnable()
 	{
 		AIManager.AllNPCs.Add(this);
 	}
@@ -20,15 +22,10 @@ public class NPC : MonoBehaviour
 	{
 		AIManager.AllNPCs.Remove(this);
 	}
-
-	// Use this for initialization
-	void Start () {
-		
-	}
 	
 	public virtual void RaycastTick()
 	{
-        if (looker.Raycast(PlayerManager.Instance.ctrl.transform))
+        if (looker.Raycast(Player.ctrl.transform))
         {
             if (!playerInSight)
             {
@@ -61,8 +58,13 @@ public class NPC : MonoBehaviour
 	{
 	}
 
-	protected void TargetPlayer()
+	protected virtual void TargetPlayer()
 	{
-		navigator.SetFollowTarget(PlayerManager.Instance.ctrl.transform);
+		navigator.SetFollowTarget(Player.ctrl.transform);
 	}
+
+    protected virtual void Wander(WanderType type = WanderType.Any)
+    {
+		navigator.SetDestination(em.GetWanderPoint(type));
+    }
 }

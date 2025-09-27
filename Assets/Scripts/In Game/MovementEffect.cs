@@ -14,6 +14,5 @@ public class MovementEffect
     public Vector3 addend;
     public float multiplier;
     public int priority;
-
-    public bool forceTrigger;
+    public bool force;
 }

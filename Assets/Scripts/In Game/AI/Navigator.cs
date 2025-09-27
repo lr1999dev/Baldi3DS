@@ -6,46 +6,83 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class Navigator : MonoBehaviour
 {
-	NavMeshAgent agent;
+	public NPC npc;
+	[SerializeField] float speed = 2;
 
-	Transform followTarget;
-	float followUpdateRate, followTimer;
+	public NavMeshAgent Agent { get; private set; }
+	public float Speed
+	{
+		get { return speed; }
+		set { speed = value; }
+	}
 
 	public bool DestinationEmpty 
-	{  
-		get { return !agent.hasPath; } 
+	{
+		get { return !Agent.hasPath; } 
 	}
 
-	// Use this for initialization
-	void Start() 
+	public bool DestinationReached
 	{
-		agent = GetComponent<NavMeshAgent>();
-	}
-
-	// Update is called once per frame
-	void Update()
-	{
-		if (followTarget != null)
+		get 
 		{
-			followTimer -= Time.deltaTime;
-			if (followTimer <= 0)
-			{
-				agent.SetDestination(followTarget.position);
-				followTimer = followUpdateRate;
-			}
+			if (Agent.pathPending)
+				return false;
+			return Agent.remainingDistance <= Mathf.Max(0.1f, Agent.stoppingDistance); 
 		}
 	}
 
-	public void SetFollowTarget(Transform target, float updateRate = 0.1f)
+    Transform followTarget;
+	int currentPriority;
+
+    void Awake() 
 	{
-        followTarget = target;
-		followUpdateRate = updateRate;
-		followTimer = 0;
+        Agent = GetComponent<NavMeshAgent>();
+	}
+
+	void Update()
+	{
+		npc.RecalculateMoveEffects();
+
+		Agent.speed = speed * npc.MovementMultiplier;
+		if (npc.MovementAddend.sqrMagnitude > 0)
+			Agent.Move(npc.MovementAddend);
+	}
+
+    public void SetDestination(Vector3 target, int priority = 0)
+    {
+        if (priority >= currentPriority || DestinationEmpty)
+        {
+            currentPriority = priority;
+            Agent.SetDestination(target);
+        }
+    }
+
+	public void ClearDestination()
+	{
+		Agent.ResetPath();
+	}
+
+	public void Warp(Vector3 target, bool forget = false)
+	{
+		Agent.Warp(target);
+		if (forget)
+			ClearDestination();
+	}
+
+    public void SetFollowTarget(Transform target)
+	{
+        if (followTarget != target)
+            followTarget = target;
+    }
+
+	public void ClearFollowTarget()
+	{
+		followTarget = null;
 	}
 
 	public void UpdateToFollowTarget()
 	{
 		if (followTarget != null)
-			agent.SetDestination(followTarget.position);
+			Agent.SetDestination(followTarget.position);
 	}
 }

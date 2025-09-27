@@ -10,7 +10,7 @@ public class AdjustmentKnob : MonoBehaviour
 	[SerializeField] Sprite[] sprites;
 
 	public AnimationCurve valueCurve;
-	public UnityEventFloat onValueChanged;
+	public UnityEvent_Float onValueChanged;
 
 	int intVal;
 
@@ -19,11 +19,9 @@ public class AdjustmentKnob : MonoBehaviour
 		get { return valueCurve.Evaluate((float)intVal / sprites.Length); }
     }
 
-	// Use this for initialization
 	void Start () 
 	{
 		UpdateSprite();
-		Adjust(0);
 	}
 
 	public void Adjust(int dir)
@@ -33,8 +31,9 @@ public class AdjustmentKnob : MonoBehaviour
 			intVal = sprites.Length - 1;
 		else if (intVal >= sprites.Length)
 			intVal = 0;
-		onValueChanged.Invoke(FloatVal);
-		UpdateSprite();
+
+        onValueChanged.Invoke(FloatVal);
+        UpdateSprite();
 	}
 
 	public void Set(float val)
